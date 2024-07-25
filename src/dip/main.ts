@@ -4,7 +4,7 @@ import { Messaging } from './services/messaging';
 import { Persistency } from './services/persistency';
 import { Product } from './classes/product';
 import { NoDiscount } from './classes/discount';
-import { EnterpriseCustomer, IndividualCustomer } from './classes/customer';
+import { EnterpriseCustomer } from './classes/customer';
 
 // const fiftyPercentDiscount = new FiftyPercentDiscount();
 // const tenPercentDiscount = new TenPercentDiscount();
@@ -12,9 +12,19 @@ const noDiscount = new NoDiscount();
 const shoppingCart = new ShoppingCart(noDiscount);
 const messaging = new Messaging();
 const persistency = new Persistency();
-const individualCustomer = new IndividualCustomer('Luiz', 'Miranda', '111.111.111-11');
-const enterpriseCustomer = new EnterpriseCustomer('Luiz', '111.111.111-11');
-const order = new Order(shoppingCart, messaging, persistency, enterpriseCustomer);
+// const individualCustomer = new IndividualCustomer('Luiz', 'Miranda', '111.111.111-11');
+// const enterpriseCustomer = new EnterpriseCustomer('Luiz', '111.111.111-11');
+const order = new Order(shoppingCart, messaging, persistency);
+
+class MessagingMock implements MessagingProtocol {
+  sendMessage(): void {
+    console.log('A mensagem foi enviada pelo MOCK');
+  }
+}
+
+const messagingMock = new MessagingMock();
+
+const order = new Order( shoppingCart, messagingMock, persistency, enterpriseCustomer,);
 
 shoppingCart.addItem(new Product('Camiseta', 49.91));
 shoppingCart.addItem(new Product('Caderno', 9.9123));
